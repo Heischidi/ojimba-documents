@@ -24,6 +24,9 @@ class Product(Base):
     price: Mapped[int] = mapped_column(Integer, nullable=False)
     currency: Mapped[str] = mapped_column(String(3), default="NGN", nullable=False)
 
+    # Subaccount code for Paystack split payments
+    paystack_subaccount: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
+
     # S3 object key — NEVER the public URL
     file_key: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     file_name: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)

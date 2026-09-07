@@ -10,6 +10,7 @@ class ProductBase(BaseModel):
     description: Optional[str] = None
     price: int  # in kobo
     currency: str = "NGN"
+    paystack_subaccount: Optional[str] = None
 
 
 class ProductCreate(ProductBase):
@@ -32,6 +33,7 @@ class ProductUpdate(BaseModel):
     name: Optional[str] = None
     description: Optional[str] = None
     price: Optional[int] = None
+    paystack_subaccount: Optional[str] = None
     is_active: Optional[bool] = None
 
     @field_validator("price")
@@ -61,6 +63,7 @@ class ProductPublic(BaseModel):
 
 class ProductAdmin(ProductPublic):
     file_key: Optional[str] = None  # Only exposed to admins
+    paystack_subaccount: Optional[str] = None
     updated_at: datetime
 
 

@@ -21,6 +21,7 @@ export default function EditProductPage() {
   const [description, setDescription] = useState("");
   const [priceNaira, setPriceNaira] = useState("");
   const [isActive, setIsActive] = useState(false);
+  const [paystackSubaccount, setPaystackSubaccount] = useState("");
 
   useEffect(() => {
     adminProductsApi.get(id).then((p) => {
@@ -29,6 +30,7 @@ export default function EditProductPage() {
       setDescription(p.description || "");
       setPriceNaira(String(p.price / 100));
       setIsActive(p.is_active);
+      setPaystackSubaccount(p.paystack_subaccount || "");
     }).catch(() => {
       toast.error("Product not found.");
       router.push("/admin/products");
@@ -43,6 +45,7 @@ export default function EditProductPage() {
         description: description || undefined,
         price: Math.round(parseFloat(priceNaira) * 100),
         is_active: isActive,
+        paystack_subaccount: paystackSubaccount || undefined,
       });
       toast.success("Product updated.");
     } catch (err: any) {
@@ -140,6 +143,11 @@ export default function EditProductPage() {
               </div>
               <span className="text-sm font-medium text-gray-700">{isActive ? "Published" : "Draft"}</span>
             </label>
+          </div>
+          <div className="pt-2 border-t border-gray-100">
+            <label className="label">Paystack Subaccount Code <span className="text-gray-400 font-normal text-xs">(optional)</span></label>
+            <input type="text" placeholder="ACCT_xxxxxxxxxxxxx" className="input" value={paystackSubaccount} onChange={(e) => setPaystackSubaccount(e.target.value)} />
+            <p className="mt-1.5 text-xs text-gray-500">Enter the subaccount code from Paystack to automatically route payouts to a specific vendor.</p>
           </div>
           <button onClick={handleSave} disabled={saving} className="btn-primary w-full py-3 justify-center">
             {saving ? <><Loader2 className="w-4 h-4 animate-spin" /> Saving…</> : <><Save className="w-4 h-4" /> Save Changes</>}

@@ -117,7 +117,7 @@ export const adminProductsApi = {
       (r) => handleResponse(r)
     ),
 
-  create: (data: { name: string; description?: string; price: number; currency?: string }): Promise<any> =>
+  create: (data: { name: string; description?: string; price: number; currency?: string; paystack_subaccount?: string }): Promise<any> =>
     fetch(`${API_BASE}/api/admin/products`, {
       method: "POST",
       headers: defaultHeaders,

@@ -58,7 +58,11 @@ async def initialize(
 
     callback_url = f"{settings.APP_URL}/payment/success?reference={order.reference}"
 
-    auth_url = await initialize_payment(order=order, callback_url=callback_url)
+    auth_url = await initialize_payment(
+        order=order, 
+        callback_url=callback_url,
+        subaccount_code=product.paystack_subaccount
+    )
 
     return PaymentInitResponse(
         authorization_url=auth_url,

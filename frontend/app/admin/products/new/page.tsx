@@ -15,6 +15,7 @@ const productSchema = z.object({
   description: z.string().optional(),
   price_naira: z.number({ invalid_type_error: "Price is required." }).positive("Price must be greater than 0."),
   currency: z.string().default("NGN"),
+  paystack_subaccount: z.string().optional().or(z.literal("")),
 });
 
 type ProductForm = z.infer<typeof productSchema>;
@@ -42,6 +43,7 @@ export default function NewProductPage() {
         description: data.description || undefined,
         price: Math.round(data.price_naira * 100), // convert to kobo
         currency: data.currency,
+        paystack_subaccount: data.paystack_subaccount || undefined,
       });
       setProductId(product.id);
       setStep("files");
@@ -166,6 +168,14 @@ export default function NewProductPage() {
                 </select>
               </div>
             </div>
+            
+            <div className="pt-2 border-t border-gray-100">
+              <label className="label">Paystack Subaccount Code <span className="text-gray-400 font-normal text-xs">(optional)</span></label>
+              <input type="text" placeholder="ACCT_xxxxxxxxxxxxx" className={`input ${errors.paystack_subaccount ? "input-error" : ""}`} {...register("paystack_subaccount")} />
+              {errors.paystack_subaccount && <p className="field-error">{errors.paystack_subaccount.message}</p>}
+              <p className="mt-1.5 text-xs text-gray-500">Enter the subaccount code from Paystack to automatically route payouts to a specific vendor.</p>
+            </div>
+
             <button type="submit" disabled={saving} className="btn-primary w-full py-3 justify-center">
               {saving ? <><Loader2 className="w-4 h-4 animate-spin" /> Creating…</> : "Continue to Files →"}
             </button>

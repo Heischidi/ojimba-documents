@@ -22,6 +22,7 @@ PAYSTACK_HEADERS = {
 async def initialize_payment(
     order: Order,
     callback_url: str,
+    subaccount_code: Optional[str] = None,
 ) -> str:
     """
     Initializes a Paystack transaction.
@@ -47,7 +48,11 @@ async def initialize_payment(
         },
     }
 
-    logger.info("paystack_init_start", reference=order.reference, amount=order.amount)
+    if subaccount_code:
+        payload["subaccount"] = subaccount_code
+        payload["transaction_charge"] = 0 # 100% of amount minus paystack fees goes to vendor
+
+    logger.info("paystack_init_start", reference=order.reference, amount=order.amount, subaccount=subaccount_code)
 
     async with httpx.AsyncClient(timeout=30) as client:
         try:
