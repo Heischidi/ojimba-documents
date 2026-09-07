@@ -31,11 +31,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [admin, setAdmin] = useState<any>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  const isLoginPage = pathname === "/admin/login";
+
   useEffect(() => {
+    if (isLoginPage) return;
     authApi.me().then(setAdmin).catch(() => {
       router.push("/admin/login");
     });
-  }, [router]);
+  }, [router, isLoginPage]);
 
   const handleLogout = async () => {
     await authApi.logout();
@@ -44,6 +47,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   const isActive = (href: string, exact = false) =>
     exact ? pathname === href : pathname.startsWith(href);
+
+  // If it's the login page, just render the children without sidebar or auth checks
+  if (isLoginPage) {
+    return <>{children}</>;
+  }
 
   if (!admin) {
     return (
