@@ -29,8 +29,8 @@ async def login(
         key=COOKIE_NAME,
         value=token,
         httponly=True,
-        secure=settings.is_production,
-        samesite="lax",
+        secure=True, # Must be true for samesite="none"
+        samesite="none", # Allow cross-domain cookies (Vercel -> Render)
         max_age=COOKIE_MAX_AGE,
         path="/",
     )
