@@ -21,7 +21,7 @@ class AuditLogRepository:
             action=action,
             entity_type=entity_type,
             entity_id=entity_id,
-            metadata=metadata,
+            meta=metadata,
         )
         self.db.add(log)
         await self.db.flush()

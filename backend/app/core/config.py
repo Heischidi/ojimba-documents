@@ -28,6 +28,27 @@ class Settings(BaseSettings):
                 v = v.replace("postgres://", "postgresql+asyncpg://", 1)
             elif v.startswith("postgresql://") and not v.startswith("postgresql+asyncpg://"):
                 v = v.replace("postgresql://", "postgresql+asyncpg://", 1)
+
+            # Clean query parameters for asyncpg (e.g. Neon connection string)
+            if "?" in v:
+                base, query = v.split("?", 1)
+                params = [p for p in query.split("&") if p and not p.startswith("channel_binding")]
+                new_params = []
+                has_ssl = False
+                for p in params:
+                    if p.startswith("sslmode="):
+                        new_params.append("ssl=require")
+                        has_ssl = True
+                    elif p.startswith("ssl="):
+                        new_params.append(p)
+                        has_ssl = True
+                    else:
+                        new_params.append(p)
+                if not has_ssl and "neon.tech" in base:
+                    new_params.append("ssl=require")
+                v = base + ("?" + "&".join(new_params) if new_params else "")
+            elif "neon.tech" in v:
+                v = v + "?ssl=require"
         return v
 
     # JWT
