@@ -48,7 +48,7 @@ class Order(Base):
     )
 
     status: Mapped[OrderStatus] = mapped_column(
-        SAEnum(OrderStatus), default=OrderStatus.PENDING, nullable=False, index=True
+        SAEnum(OrderStatus, values_callable=lambda obj: [e.value for e in obj]), default=OrderStatus.PENDING, nullable=False, index=True
     )
 
     created_at: Mapped[datetime] = mapped_column(
