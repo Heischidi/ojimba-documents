@@ -82,7 +82,7 @@ class Settings(BaseSettings):
     MAX_DOWNLOADS: int = 5
 
     # CORS
-    CORS_ORIGINS: str = "http://localhost:3000,http://localhost:3001"
+    CORS_ORIGINS: str = "http://localhost:3000,http://localhost:3001,https://ojimba-documents.vercel.app"
 
     @property
     def cors_origins_list(self) -> list[str]:
