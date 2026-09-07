@@ -1,13 +1,28 @@
 from typing import Optional, List
 from uuid import UUID
+import unicodedata
+import re
 from sqlalchemy.ext.asyncio import AsyncSession
-from slugify import slugify
 from app.core.exceptions import ProductNotFoundError, DuplicateError
 from app.core.logging import get_logger
 from app.repositories.product_repo import ProductRepository
 from app.models.product import Product
 
 logger = get_logger(__name__)
+
+
+def slugify(text: str) -> str:
+    """Convert text to a URL-safe slug without any external packages."""
+    text = str(text).lower().strip()
+    # Normalize unicode -> ASCII
+    text = unicodedata.normalize("NFKD", text)
+    text = text.encode("ascii", "ignore").decode("ascii")
+    # Replace non-alphanumerics with hyphens
+    text = re.sub(r"[^\w\s-]", "", text)
+    text = re.sub(r"[\s_-]+", "-", text)
+    text = text.strip("-")
+    return text or "product"
+
 
 
 class ProductService:
