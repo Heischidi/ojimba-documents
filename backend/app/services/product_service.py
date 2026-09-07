@@ -1,7 +1,7 @@
 from typing import Optional, List
 from uuid import UUID
 from sqlalchemy.ext.asyncio import AsyncSession
-from python_slugify import slugify
+from slugify import slugify
 from app.core.exceptions import ProductNotFoundError, DuplicateError
 from app.core.logging import get_logger
 from app.repositories.product_repo import ProductRepository
