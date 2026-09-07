@@ -27,13 +27,16 @@ ALLOWED_MIME_TYPES = {
 
 
 def _get_s3_client():
-    return boto3.client(
-        "s3",
-        aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-        aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
-        region_name=settings.AWS_REGION,
-        config=Config(signature_version="s3v4"),
-    )
+    kwargs = {
+        "aws_access_key_id": settings.AWS_ACCESS_KEY_ID,
+        "aws_secret_access_key": settings.AWS_SECRET_ACCESS_KEY,
+        "region_name": settings.AWS_REGION,
+        "config": Config(signature_version="s3v4"),
+    }
+    if settings.AWS_ENDPOINT_URL:
+        kwargs["endpoint_url"] = settings.AWS_ENDPOINT_URL
+        
+    return boto3.client("s3", **kwargs)
 
 
 def validate_file(filename: str, content_type: str, file_size: int) -> str:
@@ -152,7 +155,11 @@ async def upload_thumbnail_to_s3(file_data: bytes, content_type: str) -> str:
             # Thumbnails are publicly readable for display on product pages
             ACL="public-read",
         )
-        url = f"https://{settings.AWS_S3_BUCKET}.s3.{settings.AWS_REGION}.amazonaws.com/{s3_key}"
+        if settings.PUBLIC_STORAGE_URL:
+            # e.g., https://<project>.supabase.co/storage/v1/object/public/<bucket>
+            url = f"{settings.PUBLIC_STORAGE_URL}/{s3_key}"
+        else:
+            url = f"https://{settings.AWS_S3_BUCKET}.s3.{settings.AWS_REGION}.amazonaws.com/{s3_key}"
         return url
     except ClientError as e:
         raise S3UploadError(f"Failed to upload thumbnail: {e.response['Error']['Message']}")

@@ -61,11 +61,13 @@ class Settings(BaseSettings):
     PAYSTACK_PUBLIC_KEY: str = ""
     PAYSTACK_BASE_URL: str = "https://api.paystack.co"
 
-    # AWS S3
+    # AWS S3 (or S3-compatible like Supabase/Cloudflare R2)
     AWS_ACCESS_KEY_ID: str = ""
     AWS_SECRET_ACCESS_KEY: str = ""
     AWS_REGION: str = "us-east-1"
     AWS_S3_BUCKET: str = ""
+    AWS_ENDPOINT_URL: Optional[str] = None
+    PUBLIC_STORAGE_URL: Optional[str] = None
     S3_SIGNED_URL_EXPIRY: int = 60  # seconds
 
     # Resend / Email
