@@ -5,31 +5,69 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { productsApi } from "@/lib/api";
 import { Product, formatPrice } from "@/types";
-import { ShoppingBag, Download, Shield, Zap, ArrowRight, Star, CheckCircle2 } from "lucide-react";
+import {
+  ShoppingBag,
+  Download,
+  Shield,
+  Zap,
+  ArrowRight,
+  CheckCircle2,
+  Menu,
+  X,
+} from "lucide-react";
 
 // ── Navigation ────────────────────────────────────────────────────────────────
 function Nav() {
+  const [open, setOpen] = useState(false);
   return (
-    <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
-      <div className="container-lg flex items-center justify-between h-16">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-gradient-brand flex items-center justify-center">
-            <Download className="w-4 h-4 text-white" />
+    <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-xl border-b border-gray-100 shadow-sm">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+        <Link href="/" className="flex items-center gap-2.5">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-violet-500/30">
+            <Download className="w-4.5 h-4.5 text-white" style={{ width: 18, height: 18 }} />
           </div>
-          <span className="font-display font-bold text-gray-900 text-lg">DigiStore</span>
+          <span className="font-bold text-gray-900 text-xl tracking-tight" style={{ fontFamily: "Outfit, sans-serif" }}>
+            DigiStore
+          </span>
         </Link>
-        <nav className="hidden md:flex items-center gap-6">
-          <Link href="/products" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
+
+        <nav className="hidden md:flex items-center gap-8">
+          <Link href="/products" className="text-sm font-medium text-gray-600 hover:text-violet-700 transition-colors">
             Products
           </Link>
-          <Link href="/contact" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
-            Contact
+          <Link href="#how-it-works" className="text-sm font-medium text-gray-600 hover:text-violet-700 transition-colors">
+            How it Works
           </Link>
         </nav>
-        <Link href="/products" className="btn-primary text-sm px-4 py-2">
-          Browse Products
-        </Link>
+
+        <div className="hidden md:flex items-center gap-3">
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-semibold shadow-md shadow-violet-500/25 hover:shadow-lg hover:shadow-violet-500/35 hover:-translate-y-0.5 transition-all duration-200"
+          >
+            Browse Products
+            <ArrowRight style={{ width: 15, height: 15 }} />
+          </Link>
+        </div>
+
+        <button className="md:hidden p-2 rounded-lg text-gray-600" onClick={() => setOpen(!open)}>
+          {open ? <X style={{ width: 22, height: 22 }} /> : <Menu style={{ width: 22, height: 22 }} />}
+        </button>
       </div>
+
+      {open && (
+        <div className="md:hidden border-t border-gray-100 bg-white px-4 py-4 space-y-3">
+          <Link href="/products" className="block text-sm font-medium text-gray-700 py-2" onClick={() => setOpen(false)}>Products</Link>
+          <Link href="#how-it-works" className="block text-sm font-medium text-gray-700 py-2" onClick={() => setOpen(false)}>How it Works</Link>
+          <Link
+            href="/products"
+            className="block text-center px-5 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-semibold"
+            onClick={() => setOpen(false)}
+          >
+            Browse Products
+          </Link>
+        </div>
+      )}
     </header>
   );
 }
@@ -37,36 +75,36 @@ function Nav() {
 // ── Footer ────────────────────────────────────────────────────────────────────
 function Footer() {
   return (
-    <footer className="bg-gray-900 text-gray-400 py-12 px-4">
-      <div className="container-lg">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+    <footer style={{ background: "#0f0f1a" }} className="text-gray-400 py-16 px-4">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-10">
           <div className="col-span-2">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-7 h-7 rounded-lg bg-gradient-brand flex items-center justify-center">
-                <Download className="w-3.5 h-3.5 text-white" />
+            <div className="flex items-center gap-2.5 mb-4">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center">
+                <Download className="text-white" style={{ width: 16, height: 16 }} />
               </div>
-              <span className="font-display font-bold text-white text-base">DigiStore</span>
+              <span className="font-bold text-white text-lg" style={{ fontFamily: "Outfit, sans-serif" }}>DigiStore</span>
             </div>
-            <p className="text-sm leading-relaxed max-w-xs">
-              Premium digital products delivered securely to your inbox after payment.
+            <p className="text-sm leading-relaxed max-w-xs text-gray-500">
+              Premium digital products delivered securely to your inbox the moment payment clears.
             </p>
           </div>
           <div>
-            <p className="text-white font-semibold text-sm mb-3">Product</p>
-            <ul className="space-y-2 text-sm">
+            <p className="text-white font-semibold text-sm mb-4">Store</p>
+            <ul className="space-y-2.5 text-sm">
               <li><Link href="/products" className="hover:text-white transition-colors">All Products</Link></li>
-              <li><Link href="/contact" className="hover:text-white transition-colors">Contact</Link></li>
+              <li><Link href="#how-it-works" className="hover:text-white transition-colors">How it Works</Link></li>
             </ul>
           </div>
           <div>
-            <p className="text-white font-semibold text-sm mb-3">Legal</p>
-            <ul className="space-y-2 text-sm">
+            <p className="text-white font-semibold text-sm mb-4">Legal</p>
+            <ul className="space-y-2.5 text-sm">
               <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
               <li><Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
             </ul>
           </div>
         </div>
-        <div className="pt-8 border-t border-gray-800 text-sm text-center">
+        <div className="pt-8 border-t border-gray-800 text-sm text-center text-gray-600">
           © {new Date().getFullYear()} DigiStore. All rights reserved. Payments powered by Paystack.
         </div>
       </div>
@@ -79,9 +117,9 @@ function ProductCard({ product }: { product: Product }) {
   return (
     <Link
       href={`/products/${product.slug}`}
-      className="card group flex flex-col overflow-hidden hover:-translate-y-1 transition-all duration-300 animate-fade-in"
+      className="group flex flex-col bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:shadow-violet-500/10 hover:-translate-y-1.5 transition-all duration-300 overflow-hidden"
     >
-      <div className="relative h-48 bg-gradient-subtle overflow-hidden">
+      <div className="relative h-48 overflow-hidden bg-gradient-to-br from-violet-50 to-indigo-50">
         {product.thumbnail_url ? (
           <Image
             src={product.thumbnail_url}
@@ -91,34 +129,49 @@ function ProductCard({ product }: { product: Product }) {
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-16 h-16 rounded-2xl bg-brand-100 flex items-center justify-center">
-              <ShoppingBag className="w-8 h-8 text-brand-600" />
+            <div className="w-16 h-16 rounded-2xl bg-violet-100 flex items-center justify-center">
+              <ShoppingBag className="text-violet-600" style={{ width: 28, height: 28 }} />
             </div>
           </div>
         )}
         <div className="absolute top-3 right-3">
-          <span className="badge-purple text-xs px-2 py-1">
+          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-violet-100 text-violet-700 border border-violet-200">
             {product.mime_type?.split("/")[1]?.toUpperCase() || "FILE"}
           </span>
         </div>
       </div>
       <div className="p-5 flex flex-col flex-1">
-        <h3 className="font-display font-bold text-gray-900 text-lg leading-snug mb-2 group-hover:text-brand-700 transition-colors">
+        <h3 className="font-bold text-gray-900 text-lg leading-snug mb-2 group-hover:text-violet-700 transition-colors" style={{ fontFamily: "Outfit, sans-serif" }}>
           {product.name}
         </h3>
         <p className="text-gray-500 text-sm leading-relaxed mb-4 flex-1 line-clamp-2">
           {product.description}
         </p>
-        <div className="flex items-center justify-between mt-auto">
-          <span className="text-brand-700 font-bold text-xl">
+        <div className="flex items-center justify-between mt-auto pt-3 border-t border-gray-50">
+          <span className="text-violet-700 font-bold text-xl">
             {formatPrice(product.price, product.currency)}
           </span>
-          <span className="flex items-center gap-1 text-sm font-semibold text-gray-400 group-hover:text-brand-600 transition-colors">
-            Buy Now <ArrowRight className="w-4 h-4" />
+          <span className="flex items-center gap-1 text-sm font-semibold text-gray-400 group-hover:text-violet-600 transition-colors">
+            Buy Now <ArrowRight style={{ width: 15, height: 15 }} />
           </span>
         </div>
       </div>
     </Link>
+  );
+}
+
+// ── Skeleton ─────────────────────────────────────────────────────────────────
+function SkeletonCard() {
+  return (
+    <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+      <div className="h-48 animate-shimmer" />
+      <div className="p-5 space-y-3">
+        <div className="h-5 w-3/4 rounded-lg animate-shimmer" />
+        <div className="h-4 w-full rounded-lg animate-shimmer" />
+        <div className="h-4 w-2/3 rounded-lg animate-shimmer" />
+        <div className="h-6 w-1/3 rounded-lg animate-shimmer mt-4" />
+      </div>
+    </div>
   );
 }
 
@@ -136,69 +189,124 @@ export default function HomePage() {
       <Nav />
       <main>
         {/* ── Hero ── */}
-        <section className="relative overflow-hidden bg-gradient-to-br from-gray-900 via-brand-900 to-indigo-900 text-white py-24 md:py-36 px-4">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(139,92,246,0.3),transparent_60%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(79,70,229,0.2),transparent_60%)]" />
-          <div className="container-md relative text-center">
-            <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 text-sm mb-8 backdrop-blur-sm animate-fade-in">
-              <Zap className="w-3.5 h-3.5 text-yellow-400" />
-              <span>Instant delivery after payment</span>
+        <section
+          className="relative overflow-hidden text-white py-28 md:py-40 px-4"
+          style={{ background: "linear-gradient(135deg, #0f0720 0%, #1a0a3b 40%, #0c1260 100%)" }}
+        >
+          {/* Glowing orbs */}
+          <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full opacity-20 pointer-events-none" style={{ background: "radial-gradient(circle, #7c3aed, transparent 70%)", transform: "translate(30%, -30%)" }} />
+          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full opacity-15 pointer-events-none" style={{ background: "radial-gradient(circle, #4f46e5, transparent 70%)", transform: "translate(-30%, 30%)" }} />
+
+          <div className="max-w-4xl mx-auto text-center relative">
+            <div className="inline-flex items-center gap-2 border border-white/20 rounded-full px-4 py-2 text-sm mb-8 animate-fade-in" style={{ background: "rgba(255,255,255,0.07)", backdropFilter: "blur(12px)" }}>
+              <Zap className="text-yellow-400" style={{ width: 14, height: 14 }} />
+              <span className="text-gray-200">Instant delivery after payment</span>
             </div>
-            <h1 className="font-display font-extrabold text-4xl md:text-6xl lg:text-7xl leading-tight mb-6 animate-fade-in">
-              Premium Digital
-              <br />
-              <span className="bg-gradient-to-r from-violet-400 to-indigo-400 bg-clip-text text-transparent">
+
+            <h1
+              className="font-black text-5xl md:text-7xl leading-[1.05] mb-6 animate-fade-in"
+              style={{ fontFamily: "Outfit, sans-serif" }}
+            >
+              Premium Digital{" "}
+              <span
+                className="block"
+                style={{ background: "linear-gradient(135deg, #a78bfa 0%, #818cf8 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}
+              >
                 Products
               </span>
             </h1>
-            <p className="text-gray-300 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed animate-fade-in">
+
+            <p className="text-gray-300 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed animate-fade-in-delay">
               Courses, templates, guides, and tools — delivered securely to your email the moment payment clears.
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in">
-              <Link href="/products" className="btn-primary text-base px-8 py-4">
-                Browse All Products
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-delay">
+              <Link
+                href="/products"
+                className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl font-bold text-base transition-all duration-200 hover:-translate-y-0.5"
+                style={{ background: "linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%)", boxShadow: "0 8px 32px rgba(124,58,237,0.4)" }}
+              >
+                Browse All Products <ArrowRight style={{ width: 18, height: 18 }} />
               </Link>
-              <Link href="#how-it-works" className="btn-ghost text-white/80 hover:text-white hover:bg-white/10 text-base px-6 py-4">
+              <Link
+                href="#how-it-works"
+                className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl font-semibold text-base text-gray-200 border border-white/20 hover:bg-white/10 transition-all duration-200"
+              >
                 How It Works
               </Link>
             </div>
-            <div className="flex items-center justify-center gap-8 mt-12 text-sm text-gray-400">
-              <div className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-400" /> Secure payments</div>
-              <div className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-400" /> Instant delivery</div>
-              <div className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-400" /> Private downloads</div>
+
+            <div className="flex flex-wrap items-center justify-center gap-6 mt-14 text-sm text-gray-400">
+              {[
+                { icon: CheckCircle2, text: "Secure Paystack payments" },
+                { icon: Zap, text: "Instant email delivery" },
+                { icon: Shield, text: "Private encrypted downloads" },
+              ].map(({ icon: Icon, text }) => (
+                <div key={text} className="flex items-center gap-2">
+                  <Icon className="text-emerald-400" style={{ width: 16, height: 16 }} />
+                  <span>{text}</span>
+                </div>
+              ))}
             </div>
           </div>
         </section>
 
+        {/* ── Stats Banner ── */}
+        <section className="py-8 border-y border-gray-100 bg-white">
+          <div className="max-w-4xl mx-auto px-4 grid grid-cols-3 gap-4 text-center">
+            {[
+              { value: "100%", label: "Secure payments" },
+              { value: "<60s", label: "Delivery time" },
+              { value: "5★", label: "Customer rating" },
+            ].map(({ value, label }) => (
+              <div key={label}>
+                <p className="text-2xl font-black text-violet-700" style={{ fontFamily: "Outfit, sans-serif" }}>{value}</p>
+                <p className="text-xs text-gray-500 mt-0.5">{label}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
         {/* ── Featured Products ── */}
-        <section className="section bg-gray-50">
-          <div className="container-lg">
-            <div className="text-center mb-12">
-              <h2 className="font-display font-bold text-3xl md:text-4xl text-gray-900 mb-3">
+        <section className="py-20 md:py-28 px-4 bg-gray-50">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-14">
+              <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-violet-100 text-violet-700 mb-4">
+                Our Catalogue
+              </span>
+              <h2 className="font-black text-4xl md:text-5xl text-gray-900 mb-4" style={{ fontFamily: "Outfit, sans-serif" }}>
                 Featured Products
               </h2>
-              <p className="text-gray-500 text-lg">High-quality digital resources hand-picked for you.</p>
+              <p className="text-gray-500 text-lg max-w-xl mx-auto">
+                High-quality digital resources crafted to help you grow faster.
+              </p>
             </div>
+
             {loading ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {[...Array(3)].map((_, i) => (
-                  <div key={i} className="card h-72 skeleton" />
-                ))}
+                {[...Array(3)].map((_, i) => <SkeletonCard key={i} />)}
               </div>
             ) : products.length === 0 ? (
-              <div className="text-center py-16 text-gray-400">
-                <ShoppingBag className="w-12 h-12 mx-auto mb-3 opacity-40" />
-                <p>No products available yet.</p>
+              <div className="text-center py-20">
+                <div className="w-20 h-20 rounded-2xl bg-violet-50 flex items-center justify-center mx-auto mb-4">
+                  <ShoppingBag className="text-violet-400" style={{ width: 36, height: 36 }} />
+                </div>
+                <p className="text-gray-400 text-lg font-medium">Products coming soon!</p>
+                <p className="text-gray-400 text-sm mt-1">Check back later for amazing digital resources.</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {products.slice(0, 6).map((p) => <ProductCard key={p.id} product={p} />)}
               </div>
             )}
+
             {products.length > 0 && (
-              <div className="text-center mt-10">
-                <Link href="/products" className="btn-secondary">
-                  View All Products <ArrowRight className="w-4 h-4" />
+              <div className="text-center mt-12">
+                <Link
+                  href="/products"
+                  className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl font-semibold text-violet-700 border-2 border-violet-200 hover:bg-violet-50 hover:border-violet-300 transition-all duration-200"
+                >
+                  View All Products <ArrowRight style={{ width: 16, height: 16 }} />
                 </Link>
               </div>
             )}
@@ -206,50 +314,91 @@ export default function HomePage() {
         </section>
 
         {/* ── How It Works ── */}
-        <section id="how-it-works" className="section">
-          <div className="container-md">
-            <div className="text-center mb-12">
-              <h2 className="font-display font-bold text-3xl md:text-4xl text-gray-900 mb-3">
+        <section id="how-it-works" className="py-20 md:py-28 px-4 bg-white">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-14">
+              <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-700 mb-4">
+                Simple Process
+              </span>
+              <h2 className="font-black text-4xl md:text-5xl text-gray-900 mb-4" style={{ fontFamily: "Outfit, sans-serif" }}>
                 How It Works
               </h2>
-              <p className="text-gray-500 text-lg">3 simple steps to your digital product</p>
+              <p className="text-gray-500 text-lg">3 simple steps to get your digital product</p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[
-                { step: "01", icon: ShoppingBag, title: "Pick a Product", desc: "Browse our catalog and select the digital product you want." },
-                { step: "02", icon: Zap, title: "Pay Securely", desc: "Complete payment via Paystack. Your transaction is protected." },
-                { step: "03", icon: Download, title: "Download Instantly", desc: "Receive a secure download link in your email within seconds." },
-              ].map(({ step, icon: Icon, title, desc }) => (
-                <div key={step} className="text-center group">
-                  <div className="relative inline-flex items-center justify-center mb-5">
-                    <div className="w-16 h-16 rounded-2xl bg-brand-50 group-hover:bg-brand-100 transition-colors flex items-center justify-center">
-                      <Icon className="w-7 h-7 text-brand-600" />
-                    </div>
-                    <span className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-brand-600 text-white text-xs font-bold flex items-center justify-center">
-                      {step.slice(-1)}
-                    </span>
+                {
+                  step: "01",
+                  icon: ShoppingBag,
+                  title: "Pick a Product",
+                  desc: "Browse our catalog and select the digital product that fits your needs.",
+                  color: "from-violet-500 to-violet-700",
+                  bg: "bg-violet-50",
+                  text: "text-violet-600",
+                },
+                {
+                  step: "02",
+                  icon: Zap,
+                  title: "Pay Securely",
+                  desc: "Complete your purchase via Paystack. 100% safe and encrypted.",
+                  color: "from-indigo-500 to-indigo-700",
+                  bg: "bg-indigo-50",
+                  text: "text-indigo-600",
+                },
+                {
+                  step: "03",
+                  icon: Download,
+                  title: "Download Instantly",
+                  desc: "Receive a private, time-limited download link in your email in seconds.",
+                  color: "from-emerald-500 to-emerald-700",
+                  bg: "bg-emerald-50",
+                  text: "text-emerald-600",
+                },
+              ].map(({ step, icon: Icon, title, desc, color, bg, text }) => (
+                <div
+                  key={step}
+                  className="relative p-8 rounded-3xl border border-gray-100 bg-white shadow-sm hover:shadow-lg transition-all duration-300 group"
+                >
+                  <div className={`w-14 h-14 rounded-2xl ${bg} flex items-center justify-center mb-6`}>
+                    <Icon className={text} style={{ width: 26, height: 26 }} />
                   </div>
-                  <h3 className="font-display font-bold text-xl text-gray-900 mb-2">{title}</h3>
-                  <p className="text-gray-500 leading-relaxed">{desc}</p>
+                  <div
+                    className={`absolute top-6 right-6 w-9 h-9 rounded-full bg-gradient-to-br ${color} flex items-center justify-center text-white text-sm font-black shadow-md`}
+                  >
+                    {step.slice(-1)}
+                  </div>
+                  <h3 className="font-bold text-xl text-gray-900 mb-2" style={{ fontFamily: "Outfit, sans-serif" }}>
+                    {title}
+                  </h3>
+                  <p className="text-gray-500 leading-relaxed text-sm">{desc}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* ── Trust Section ── */}
-        <section className="section bg-brand-600">
-          <div className="container-md text-center text-white">
-            <Shield className="w-12 h-12 mx-auto mb-4 opacity-90" />
-            <h2 className="font-display font-bold text-3xl md:text-4xl mb-4">
+        {/* ── Trust CTA ── */}
+        <section
+          className="py-20 px-4 text-white"
+          style={{ background: "linear-gradient(135deg, #6d28d9 0%, #4338ca 100%)" }}
+        >
+          <div className="max-w-3xl mx-auto text-center">
+            <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center mx-auto mb-6 border border-white/20">
+              <Shield style={{ width: 30, height: 30 }} />
+            </div>
+            <h2 className="font-black text-4xl md:text-5xl mb-5" style={{ fontFamily: "Outfit, sans-serif" }}>
               Your Purchase is Fully Protected
             </h2>
-            <p className="text-brand-100 text-lg max-w-xl mx-auto mb-8 leading-relaxed">
-              Files are stored privately on encrypted cloud storage. Download links are unique, time-limited, 
-              and tied to your email. No public file access — ever.
+            <p className="text-violet-200 text-lg max-w-xl mx-auto mb-10 leading-relaxed">
+              Files are stored on encrypted cloud storage. Download links are unique, time-limited, and tied to your email. No public file access — ever.
             </p>
-            <Link href="/products" className="inline-flex items-center gap-2 bg-white text-brand-700 font-semibold px-8 py-4 rounded-xl hover:bg-brand-50 transition-colors">
-              Shop Now <ArrowRight className="w-4 h-4" />
+            <Link
+              href="/products"
+              className="inline-flex items-center gap-2 bg-white font-bold px-8 py-4 rounded-2xl transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl"
+              style={{ color: "#6d28d9" }}
+            >
+              Start Shopping <ArrowRight style={{ width: 18, height: 18 }} />
             </Link>
           </div>
         </section>
