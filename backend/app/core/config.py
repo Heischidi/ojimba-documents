@@ -20,6 +20,16 @@ class Settings(BaseSettings):
     # Database
     DATABASE_URL: str = "postgresql+asyncpg://marketplace:marketplace_password@localhost:5432/marketplace_db"
 
+    @field_validator("DATABASE_URL", mode="before")
+    @classmethod
+    def assemble_db_connection(cls, v: str) -> str:
+        if isinstance(v, str):
+            if v.startswith("postgres://"):
+                v = v.replace("postgres://", "postgresql+asyncpg://", 1)
+            elif v.startswith("postgresql://") and not v.startswith("postgresql+asyncpg://"):
+                v = v.replace("postgresql://", "postgresql+asyncpg://", 1)
+        return v
+
     # JWT
     JWT_SECRET: str = "change-me-to-a-very-long-random-secret"
     JWT_ALGORITHM: str = "HS256"
